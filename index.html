@@ -25,132 +25,167 @@
       50%      { opacity: 1;   transform: scale(1.7); }
     }
 
-    /* ── GAME SCREEN ────────────────────────────── */
-    #game {
+    /* ── LOCK / GAME SCREEN ─────────────────────── */
+    #lock {
       position: fixed; inset: 0; z-index: 10;
       display: flex; flex-direction: column; align-items: center;
       overflow-y: auto; -webkit-overflow-scrolling: touch;
-      padding: 1.2rem 1rem 1.8rem;
-      background: radial-gradient(ellipse at 50% 15%, #200045 0%, #080012 68%);
+      padding: 1.4rem 1rem 2rem;
+      background: radial-gradient(ellipse at 50% 30%, #1e0040 0%, #080012 70%);
     }
-    #game.flash { animation: screenFlash .85s ease forwards; }
-    @keyframes screenFlash {
+    #lock.flash { animation: lockFlash .85s ease forwards; }
+    @keyframes lockFlash {
       0%   { opacity:1; filter:brightness(1); }
       35%  { opacity:1; filter:brightness(5); }
-      100% { opacity:0; pointer-events:none; }
+      100% { opacity:0; pointer-events:none;  }
     }
 
-    /* header */
-    .g-para  { font-size:.65rem; letter-spacing:5px; text-transform:uppercase; color:#c9a227; }
-    .g-title { font-size:2rem; color:#fff; font-style:italic;
-               text-shadow:0 0 22px rgba(201,162,39,.55); margin-bottom:.1rem; }
-    .g-sub   { font-size:.6rem; letter-spacing:1.5px; color:rgba(255,255,255,.28);
-               text-align:center; margin-bottom:.7rem; }
+    /* header — igual que el original */
+    .l-para {
+      font-size: .75rem; letter-spacing: 5px; text-transform: uppercase;
+      color: #c9a227; margin-bottom: .3rem;
+    }
+    .l-name {
+      font-size: 2.8rem; color: #fff; font-style: italic;
+      text-shadow: 0 0 25px rgba(201,162,39,.6);
+      margin-bottom: .15rem;
+    }
+    .l-sub {
+      font-size: .75rem; letter-spacing: 2px; color: rgba(255,255,255,.35);
+      margin-bottom: 1rem;
+    }
+    .l-icon {
+      font-size: 3.4rem; margin-bottom: .8rem;
+      animation: floatIcon 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 14px rgba(201,162,39,.9));
+    }
+    @keyframes floatIcon {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-10px); }
+    }
+    .l-hint {
+      font-size: .72rem; font-style: italic;
+      color: rgba(201,162,39,.45); letter-spacing: 1px;
+      margin-bottom: .8rem; text-align: center;
+    }
 
-    /* hangman canvas */
-    #hmc { display:block; margin:0 auto; }
+    /* ── HANGMAN CANVAS ─────────────────────────── */
+    #hmc { display: block; margin: 0 auto .5rem; }
 
-    /* lives */
-    .lives { display:flex; gap:5px; justify-content:center; margin:.35rem 0; }
-    .life  { font-size:1.1rem; transition:all .4s; }
-    .life.lost { opacity:.12; filter:grayscale(1); transform:scale(.7); }
+    /* ── LIVES ──────────────────────────────────── */
+    .lives { display: flex; gap: 5px; justify-content: center; margin-bottom: .5rem; }
+    .life  { font-size: 1.05rem; transition: all .4s; }
+    .life.lost { opacity: .12; filter: grayscale(1); transform: scale(.7); }
 
-    /* word display */
+    /* ── WORD DISPLAY — estilo de los cajones originales ── */
     .word-row {
-      display:flex; gap:8px; justify-content:center;
-      flex-wrap:wrap; margin:.5rem 0 .35rem;
+      display: flex; gap: 8px; justify-content: center;
+      flex-wrap: wrap; margin-bottom: .4rem;
     }
-    .slot { display:flex; flex-direction:column; align-items:center; gap:3px; }
-    .slot-c {
-      font-size:1.75rem; font-weight:bold; min-width:26px; text-align:center;
-      min-height:34px; display:flex; align-items:center; justify-content:center; color:#fff;
+    .slot {
+      width: 38px; height: 48px;
+      border: 2px solid rgba(201,162,39,.25); border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; font-weight: bold; color: #c9a227;
+      background: rgba(201,162,39,.04);
+      transition: border-color .25s, box-shadow .25s, background .25s;
     }
-    .slot-c.revealed { color:#c9a227; animation:pop .38s ease; }
+    .slot.revealed {
+      border-color: #c9a227;
+      background: rgba(201,162,39,.13);
+      box-shadow: 0 0 12px rgba(201,162,39,.35);
+      animation: pop .38s ease;
+    }
+    .slot.dead-miss {
+      border-color: rgba(255,80,80,.4);
+      color: #ff7070;
+      background: rgba(255,60,60,.06);
+    }
     @keyframes pop {
-      0%   { transform:scale(0) rotate(-15deg); opacity:0; }
-      65%  { transform:scale(1.3) rotate(5deg);  opacity:1; }
-      100% { transform:scale(1)   rotate(0);      opacity:1; }
+      0%   { transform: scale(0) rotate(-12deg); }
+      65%  { transform: scale(1.28) rotate(5deg); }
+      100% { transform: scale(1) rotate(0); }
     }
-    .slot-l { width:26px; height:2px; background:rgba(201,162,39,.4); border-radius:1px; }
 
-    /* wrong letters */
-    .wrong-section { text-align:center; min-height:30px; margin-bottom:.35rem; }
-    .wrong-lbl  { font-size:.52rem; letter-spacing:2px; text-transform:uppercase;
-                  color:rgba(255,255,255,.2); margin-bottom:2px; }
-    .wrong-lets { font-size:.88rem; letter-spacing:4px; color:#ff7070; font-weight:bold; min-height:18px; }
+    /* ── WRONG LETTERS ──────────────────────────── */
+    .wrong-section { text-align: center; min-height: 34px; margin-bottom: .4rem; }
+    .wrong-lbl  { font-size: .55rem; letter-spacing: 2px; text-transform: uppercase;
+                  color: rgba(255,255,255,.2); margin-bottom: 2px; }
+    .wrong-lets { font-size: .9rem; letter-spacing: 4px; color: #ff7070;
+                  font-weight: bold; min-height: 18px; }
 
-    /* keyboard */
-    .keyboard { display:flex; flex-direction:column; gap:5px; width:100%; max-width:335px; }
-    .krow     { display:flex; gap:4px; justify-content:center; }
+    /* ── KEYBOARD ───────────────────────────────── */
+    .keyboard { display: flex; flex-direction: column; gap: 5px;
+                width: 100%; max-width: 335px; }
+    .krow { display: flex; gap: 4px; justify-content: center; }
     .key {
-      height:36px; flex:1; max-width:31px;
-      background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.13);
-      border-radius:7px; color:#fff; font-size:.78rem; font-weight:bold;
-      cursor:pointer; transition:all .12s; font-family:inherit;
-      display:flex; align-items:center; justify-content:center;
-      -webkit-tap-highlight-color:transparent; touch-action:manipulation;
-      user-select:none;
+      height: 36px; flex: 1; max-width: 31px;
+      background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.13);
+      border-radius: 7px; color: #fff; font-size: .78rem; font-weight: bold;
+      cursor: pointer; transition: all .12s; font-family: inherit;
+      display: flex; align-items: center; justify-content: center;
+      -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+      user-select: none;
     }
-    .key:active:not(.hit):not(.miss) { transform:scale(.86); background:rgba(255,255,255,.16); }
-    .key.hit  { background:rgba(201,162,39,.22); border-color:rgba(201,162,39,.65);
-                color:#c9a227; pointer-events:none; }
-    .key.miss { background:rgba(255,50,50,.09); border-color:rgba(255,50,50,.28);
-                color:rgba(255,100,100,.38); pointer-events:none; }
+    .key:active:not(.hit):not(.miss) { transform: scale(.86); background: rgba(255,255,255,.16); }
+    .key.hit  { background: rgba(201,162,39,.22); border-color: rgba(201,162,39,.65);
+                color: #c9a227; pointer-events: none; }
+    .key.miss { background: rgba(255,50,50,.09);  border-color: rgba(255,50,50,.28);
+                color: rgba(255,100,100,.38); pointer-events: none; }
 
     /* ── OVERLAYS ───────────────────────────────── */
     .overlay {
-      display:none; position:fixed; inset:0; z-index:40;
-      background:rgba(8,0,18,.9); backdrop-filter:blur(12px);
-      flex-direction:column; align-items:center; justify-content:center;
-      padding:2rem; text-align:center;
+      display: none; position: fixed; inset: 0; z-index: 40;
+      background: rgba(8,0,18,.9); backdrop-filter: blur(12px);
+      flex-direction: column; align-items: center; justify-content: center;
+      padding: 2rem; text-align: center;
     }
-    .overlay.show { display:flex; }
-    .ov-icon  { font-size:4.5rem; margin-bottom:1rem; animation:float 2s ease-in-out infinite; }
-    .ov-title { font-size:2rem; color:#fff; font-style:italic; margin-bottom:.5rem; }
-    .ov-text  { font-size:.9rem; color:rgba(255,255,255,.55); line-height:1.65;
-                margin-bottom:1.8rem; max-width:290px; }
-    .ov-text strong { color:#c9a227; }
+    .overlay.show { display: flex; }
+    .ov-icon  { font-size: 4.5rem; margin-bottom: 1rem; animation: floatIcon 2s ease-in-out infinite; }
+    .ov-title { font-size: 2rem; color: #fff; font-style: italic; margin-bottom: .5rem; }
+    .ov-text  { font-size: .9rem; color: rgba(255,255,255,.55); line-height: 1.65;
+                margin-bottom: 1.8rem; max-width: 290px; }
+    .ov-text strong { color: #c9a227; }
     .ov-btn {
-      padding:.75rem 2.2rem;
-      background:linear-gradient(135deg,#c9a227,#8a6a10);
-      border:none; border-radius:50px; color:#fff; font-size:.9rem;
-      letter-spacing:2.5px; text-transform:uppercase; cursor:pointer;
-      font-family:inherit; box-shadow:0 4px 20px rgba(201,162,39,.4);
-      transition:transform .15s;
+      padding: .75rem 2.2rem;
+      background: linear-gradient(135deg, #c9a227, #8a6a10);
+      border: none; border-radius: 50px; color: #fff; font-size: .9rem;
+      letter-spacing: 2.5px; text-transform: uppercase; cursor: pointer;
+      font-family: inherit; box-shadow: 0 4px 20px rgba(201,162,39,.4);
+      transition: transform .15s;
     }
-    .ov-btn:active { transform:scale(.95); }
-    @keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-9px);} }
+    .ov-btn:active { transform: scale(.95); }
 
     /* ── CONFETTI ───────────────────────────────── */
-    #confetti { position:fixed; inset:0; z-index:30; pointer-events:none; display:none; }
+    #confetti { position: fixed; inset: 0; z-index: 30; pointer-events: none; display: none; }
 
     /* ── REVEAL SCREEN ──────────────────────────── */
     #reveal {
-      position:fixed; inset:0; z-index:15;
-      display:none; flex-direction:column; align-items:center;
-      overflow-y:auto; -webkit-overflow-scrolling:touch;
-      background:linear-gradient(180deg,#080012 0%,#150028 40%,#1e0040 100%);
-      padding:2.5rem 1.5rem 4rem;
+      position: fixed; inset: 0; z-index: 15;
+      display: none; flex-direction: column; align-items: center;
+      overflow-y: auto; -webkit-overflow-scrolling: touch;
+      background: linear-gradient(180deg, #080012 0%, #150028 40%, #1e0040 100%);
+      padding: 2.5rem 1.5rem 4rem;
     }
-    #reveal.on { display:flex; }
+    #reveal.on { display: flex; }
 
-    .rc { max-width:460px; width:100%; text-align:center; }
+    .rc { max-width: 460px; width: 100%; text-align: center; }
 
     .r-tag  { font-size:.7rem; letter-spacing:5px; text-transform:uppercase; color:#c9a227;
               margin-bottom:.4rem; animation:fadeDown .6s ease .3s both; }
     .r-name { font-size:3.8rem; color:#fff; font-style:italic; font-weight:bold;
               text-shadow:0 0 30px rgba(201,162,39,.9),0 0 60px rgba(201,162,39,.4);
               margin-bottom:.2rem;
-              animation:fadeDown .6s ease .5s both,rglow 2.5s ease-in-out 1.5s infinite; }
+              animation:fadeDown .6s ease .5s both, rglow 2.5s ease-in-out 1.5s infinite; }
     @keyframes rglow {
       0%,100% { text-shadow:0 0 30px rgba(201,162,39,.9),0 0 60px rgba(201,162,39,.4); }
       50%     { text-shadow:0 0 50px rgba(201,162,39,1), 0 0 100px rgba(201,162,39,.65); }
     }
     .r-sub    { font-size:1rem; letter-spacing:3px; text-transform:uppercase;
-               color:rgba(255,255,255,.55); margin-bottom:.3rem;
-               animation:fadeDown .6s ease .7s both; }
+                color:rgba(255,255,255,.55); margin-bottom:.3rem;
+                animation:fadeDown .6s ease .7s both; }
     .r-emojis { font-size:1.8rem; letter-spacing:.4rem; margin:1rem 0 1.8rem;
-               animation:fadeIn .6s ease .9s both; }
+                animation:fadeIn .6s ease .9s both; }
 
     .card { background:linear-gradient(135deg,rgba(201,162,39,.07),rgba(80,0,120,.14));
             border:1px solid rgba(201,162,39,.28); border-radius:20px;
@@ -171,12 +206,12 @@
     .dicon { font-size:1.15rem; width:26px; text-align:center; flex-shrink:0; padding-top:1px; }
     .dlabel { font-size:.58rem; letter-spacing:2px; text-transform:uppercase;
               color:rgba(201,162,39,.55); display:block; margin-bottom:2px; }
-    .dval  { font-size:.95rem; color:#fff; font-weight:bold; }
+    .dval   { font-size:.95rem; color:#fff; font-weight:bold; }
 
     .seats { display:flex; gap:.45rem; flex-wrap:wrap; margin-top:.6rem; }
     .seat-pill { background:rgba(201,162,39,.12); border:1px solid rgba(201,162,39,.35);
-                 border-radius:20px; padding:.25rem .75rem; font-size:.7rem;
-                 color:#c9a227; letter-spacing:1px; }
+                 border-radius:20px; padding:.25rem .75rem;
+                 font-size:.7rem; color:#c9a227; letter-spacing:1px; }
 
     .msg-text { font-size:1rem; color:rgba(255,255,255,.8); font-style:italic; line-height:1.65; }
     .msg-sign { font-size:.75rem; color:rgba(201,162,39,.5); letter-spacing:2px;
@@ -216,26 +251,36 @@
     <button class="ov-btn" onclick="resetGame()">Intentarlo de nuevo 🔄</button>
   </div>
 
-  <!-- ── GAME SCREEN ─────────────────────────── -->
-  <div id="game">
-    <div style="text-align:center;margin-bottom:.6rem;">
-      <p class="g-para">Para</p>
-      <h1 class="g-title">Raquel</h1>
-      <p class="g-sub">Adivina la palabra y descubre tu regalo...</p>
-    </div>
+  <!-- ── LOCK / GAME SCREEN ─────────────────────── -->
+  <div id="lock">
 
+    <!-- Header original -->
+    <p class="l-para">Para</p>
+    <h1 class="l-name">Raquel</h1>
+    <p class="l-sub">Hay algo especial esperándote...</p>
+
+    <div class="l-icon">🔮</div>
+
+    <p class="l-hint">Pista: es lo que sientes cuando sonríes</p>
+
+    <!-- Hangman canvas -->
     <canvas id="hmc" width="180" height="150"></canvas>
 
+    <!-- Lives -->
     <div class="lives" id="lives"></div>
 
+    <!-- Word display (cajones estilo original) -->
     <div class="word-row" id="wordRow"></div>
 
+    <!-- Wrong letters -->
     <div class="wrong-section">
       <p class="wrong-lbl">Letras falladas</p>
       <p class="wrong-lets" id="wrongLets">&nbsp;</p>
     </div>
 
+    <!-- Keyboard -->
     <div class="keyboard" id="keyboard"></div>
+
   </div>
 
   <!-- ── REVEAL SCREEN ─────────────────────────── -->
@@ -308,17 +353,16 @@
       starsEl.appendChild(s);
     }
 
-    // ── HANGMAN GAME ─────────────────────────────
-    const WORD     = 'ALEGRIA';
+    // ── HANGMAN ──────────────────────────────────
+    const WORD      = 'ALEGRIA';
     const MAX_WRONG = 6;
-
-    let guessed = new Set();
-    let wrongCount = 0;
+    let guessed     = new Set();
+    let wrongCount  = 0;
 
     const canvas = document.getElementById('hmc');
     const ctx    = canvas.getContext('2d');
 
-    // HiDPI support
+    // HiDPI
     const dpr = window.devicePixelRatio || 1;
     canvas.width  = 180 * dpr;
     canvas.height = 150 * dpr;
@@ -326,7 +370,7 @@
     canvas.style.height = '150px';
     ctx.scale(dpr, dpr);
 
-    // ── Draw hangman ──
+    // ── Draw ──
     function drawHangman() {
       ctx.clearRect(0, 0, 180, 150);
       ctx.lineCap = 'round';
@@ -335,50 +379,43 @@
       // Gallows — gold
       ctx.strokeStyle = 'rgba(201,162,39,.8)';
       ctx.lineWidth = 3;
-      // Base
-      ctx.beginPath(); ctx.moveTo(10,143); ctx.lineTo(170,143); ctx.stroke();
-      // Pole
-      ctx.beginPath(); ctx.moveTo(40,10);  ctx.lineTo(40,143);  ctx.stroke();
-      // Beam
-      ctx.beginPath(); ctx.moveTo(40,10);  ctx.lineTo(120,10);  ctx.stroke();
-      // Rope
-      ctx.beginPath(); ctx.moveTo(120,10); ctx.lineTo(120,36);  ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(10,143); ctx.lineTo(170,143); ctx.stroke(); // base
+      ctx.beginPath(); ctx.moveTo(40,10);  ctx.lineTo(40,143);  ctx.stroke(); // pole
+      ctx.beginPath(); ctx.moveTo(40,10);  ctx.lineTo(120,10);  ctx.stroke(); // beam
+      ctx.beginPath(); ctx.moveTo(120,10); ctx.lineTo(120,36);  ctx.stroke(); // rope
 
       if (wrongCount === 0) return;
 
       const dead = wrongCount >= MAX_WRONG;
 
-      // Head
+      // Head — white
       ctx.strokeStyle = 'rgba(255,255,255,.92)';
       ctx.lineWidth = 2.5;
       ctx.beginPath(); ctx.arc(120, 51, 15, 0, Math.PI * 2); ctx.stroke();
 
       // Face
       if (dead) {
-        // X eyes
-        ctx.strokeStyle = '#ff5555';
-        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#ff5555'; ctx.lineWidth = 2;
+        // X left eye
         ctx.beginPath(); ctx.moveTo(113,45); ctx.lineTo(119,51); ctx.stroke();
         ctx.beginPath(); ctx.moveTo(119,45); ctx.lineTo(113,51); ctx.stroke();
+        // X right eye
         ctx.beginPath(); ctx.moveTo(121,45); ctx.lineTo(127,51); ctx.stroke();
         ctx.beginPath(); ctx.moveTo(127,45); ctx.lineTo(121,51); ctx.stroke();
         // Frown
-        ctx.beginPath(); ctx.arc(120, 60, 5, Math.PI, 2 * Math.PI); ctx.stroke();
+        ctx.beginPath(); ctx.arc(120, 61, 5, Math.PI, 2 * Math.PI); ctx.stroke();
       } else {
-        // Normal eyes (dots)
         ctx.fillStyle = 'rgba(255,255,255,.85)';
-        ctx.beginPath(); ctx.arc(115, 48, 2, 0, Math.PI * 2); ctx.fill();
-        ctx.beginPath(); ctx.arc(125, 48, 2, 0, Math.PI * 2); ctx.fill();
-        // Smile
+        ctx.beginPath(); ctx.arc(115,48,2,0,Math.PI*2); ctx.fill(); // left eye
+        ctx.beginPath(); ctx.arc(125,48,2,0,Math.PI*2); ctx.fill(); // right eye
         ctx.strokeStyle = 'rgba(255,255,255,.85)';
         ctx.lineWidth = 1.8;
-        ctx.beginPath(); ctx.arc(120, 55, 5, 0, Math.PI); ctx.stroke();
+        ctx.beginPath(); ctx.arc(120,55,5,0,Math.PI); ctx.stroke(); // smile
       }
 
-      // Body
+      // Body parts — white
       ctx.strokeStyle = 'rgba(255,255,255,.92)';
       ctx.lineWidth = 2.5;
-
       if (wrongCount >= 2) { ctx.beginPath(); ctx.moveTo(120,66);  ctx.lineTo(120,106); ctx.stroke(); }
       if (wrongCount >= 3) { ctx.beginPath(); ctx.moveTo(120,78);  ctx.lineTo(95,98);   ctx.stroke(); }
       if (wrongCount >= 4) { ctx.beginPath(); ctx.moveTo(120,78);  ctx.lineTo(145,98);  ctx.stroke(); }
@@ -386,37 +423,32 @@
       if (wrongCount >= 6) { ctx.beginPath(); ctx.moveTo(120,106); ctx.lineTo(145,133); ctx.stroke(); }
     }
 
-    // ── Build word display ──
+    // ── Word display ──
     function buildWord() {
       const wr = document.getElementById('wordRow');
       wr.innerHTML = '';
       WORD.split('').forEach((letter, i) => {
         const slot = document.createElement('div');
-        slot.className = 'slot';
-        const c = document.createElement('div');
-        c.className = 'slot-c' + (guessed.has(letter) ? ' revealed' : '');
-        c.id = `sc-${i}`;
-        c.textContent = guessed.has(letter) ? letter : '';
-        const l = document.createElement('div');
-        l.className = 'slot-l';
-        slot.appendChild(c); slot.appendChild(l);
+        slot.className = 'slot' + (guessed.has(letter) ? ' revealed' : '');
+        slot.id = `sl-${i}`;
+        slot.textContent = guessed.has(letter) ? letter : '';
         wr.appendChild(slot);
       });
     }
 
-    // ── Build lives ──
+    // ── Lives ──
     function buildLives() {
       const lv = document.getElementById('lives');
       lv.innerHTML = '';
       for (let i = 0; i < MAX_WRONG; i++) {
-        const span = document.createElement('span');
-        span.className = 'life' + (i < wrongCount ? ' lost' : '');
-        span.textContent = '🎪';
-        lv.appendChild(span);
+        const s = document.createElement('span');
+        s.className = 'life' + (i < wrongCount ? ' lost' : '');
+        s.textContent = '🎪';
+        lv.appendChild(s);
       }
     }
 
-    // ── Build keyboard (QWERTY) ──
+    // ── Keyboard ──
     function buildKeyboard() {
       const kb = document.getElementById('keyboard');
       kb.innerHTML = '';
@@ -427,8 +459,8 @@
           const btn = document.createElement('button');
           btn.className = 'key' +
             (guessed.has(letter) ? (WORD.includes(letter) ? ' hit' : ' miss') : '');
-          btn.textContent = letter;
           btn.id = `k-${letter}`;
+          btn.textContent = letter;
           btn.addEventListener('click', () => guess(letter));
           div.appendChild(btn);
         });
@@ -436,24 +468,21 @@
       });
     }
 
-    // ── Guess a letter ──
+    // ── Guess ──
     function guess(letter) {
       if (guessed.has(letter)) return;
       guessed.add(letter);
-
       const btn = document.getElementById(`k-${letter}`);
 
       if (WORD.includes(letter)) {
         btn.classList.add('hit');
-        // Reveal letter in all matching slots
         WORD.split('').forEach((l, i) => {
           if (l === letter) {
-            const el = document.getElementById(`sc-${i}`);
+            const el = document.getElementById(`sl-${i}`);
             el.textContent = letter;
             el.classList.add('revealed');
           }
         });
-        // Check win
         if (WORD.split('').every(l => guessed.has(l))) {
           setTimeout(() => document.getElementById('winOverlay').classList.add('show'), 500);
         }
@@ -462,18 +491,14 @@
         wrongCount++;
         drawHangman();
         buildLives();
-        // Update wrong letters list
-        const wl = document.getElementById('wrongLets');
         const wrongs = [...guessed].filter(l => !WORD.includes(l));
-        wl.textContent = wrongs.length ? wrongs.join('  ') : ' ';
-        // Check lose
+        document.getElementById('wrongLets').textContent = wrongs.length ? wrongs.join('  ') : ' ';
         if (wrongCount >= MAX_WRONG) {
-          // Show missed letters in red
           WORD.split('').forEach((l, i) => {
             if (!guessed.has(l)) {
-              const el = document.getElementById(`sc-${i}`);
+              const el = document.getElementById(`sl-${i}`);
               el.textContent = l;
-              el.style.color = '#ff7070';
+              el.classList.add('dead-miss');
             }
           });
           setTimeout(() => document.getElementById('loseOverlay').classList.add('show'), 900);
@@ -481,7 +506,7 @@
       }
     }
 
-    // ── Reset game ──
+    // ── Reset ──
     function resetGame() {
       guessed    = new Set();
       wrongCount = 0;
@@ -490,16 +515,16 @@
       buildWord(); buildLives(); buildKeyboard(); drawHangman();
     }
 
-    // ── Win → reveal ──
+    // ── Trigger reveal ──
     function triggerReveal() {
       document.getElementById('winOverlay').classList.remove('show');
-      const game = document.getElementById('game');
-      game.classList.add('flash');
+      const lock = document.getElementById('lock');
+      lock.classList.add('flash');
       setTimeout(startConfetti, 140);
       setTimeout(() => {
-        game.style.display = 'none';
+        lock.style.display = 'none';
         document.getElementById('reveal').classList.add('on');
-      }, 850);
+      }, 860);
     }
 
     // ── Confetti ──
@@ -511,48 +536,37 @@
       const c2  = cv.getContext('2d');
       const pal = ['#c9a227','#fff','#9b59b6','#ff6b9d','#00d4ff','#ff9500','#00ff88','#ffdd00'];
       const pp  = Array.from({length: 200}, () => ({
-        x:     Math.random() * cv.width,
-        y:     -10 - Math.random() * 400,
-        w:     Math.random() * 12 + 4,
-        h:     Math.random() * 5  + 2,
-        color: pal[Math.floor(Math.random() * pal.length)],
-        vx:    (Math.random() - .5) * 6,
-        vy:    Math.random() * 3 + 1.5,
-        rot:   Math.random() * 360,
-        spin:  (Math.random() - .5) * 10,
-        alpha: 1
+        x:Math.random()*cv.width, y:-10-Math.random()*400,
+        w:Math.random()*12+4, h:Math.random()*5+2,
+        color:pal[Math.floor(Math.random()*pal.length)],
+        vx:(Math.random()-.5)*6, vy:Math.random()*3+1.5,
+        rot:Math.random()*360, spin:(Math.random()-.5)*10, alpha:1
       }));
       let frame = 0;
       (function draw() {
-        c2.clearRect(0, 0, cv.width, cv.height);
-        frame++;
+        c2.clearRect(0,0,cv.width,cv.height); frame++;
         pp.forEach(p => {
-          p.x += p.vx; p.y += p.vy; p.rot += p.spin; p.vy += .06;
-          if (frame > 110) p.alpha -= .007;
-          c2.save();
-          c2.globalAlpha = Math.max(0, p.alpha);
-          c2.translate(p.x, p.y);
-          c2.rotate(p.rot * Math.PI / 180);
-          c2.fillStyle = p.color;
-          c2.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+          p.x+=p.vx; p.y+=p.vy; p.rot+=p.spin; p.vy+=.06;
+          if (frame>110) p.alpha-=.007;
+          c2.save(); c2.globalAlpha=Math.max(0,p.alpha);
+          c2.translate(p.x,p.y); c2.rotate(p.rot*Math.PI/180);
+          c2.fillStyle=p.color; c2.fillRect(-p.w/2,-p.h/2,p.w,p.h);
           c2.restore();
         });
-        if (pp.some(p => p.alpha > 0 && p.y < cv.height + 20))
-          requestAnimationFrame(draw);
-        else
-          cv.style.display = 'none';
+        if (pp.some(p=>p.alpha>0&&p.y<cv.height+20)) requestAnimationFrame(draw);
+        else cv.style.display='none';
       })();
     }
 
-    // ── Physical keyboard support ──
+    // ── Physical keyboard ──
     document.addEventListener('keydown', e => {
-      if (document.getElementById('game').style.display !== 'none') {
+      if (document.getElementById('lock').style.display !== 'none') {
         const l = e.key.toUpperCase();
         if (/^[A-Z]$/.test(l)) guess(l);
       }
     });
 
-    // ── INIT ──
+    // ── Init ──
     buildWord(); buildLives(); buildKeyboard(); drawHangman();
   </script>
 </body>
